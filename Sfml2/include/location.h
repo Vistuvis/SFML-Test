@@ -2,26 +2,38 @@
 #define LOCATION_H
 #include <iostream>
 
-enum loc_type{
 
-grassland,
-forest,
-mountain,
-water
 
-};
 
 
 class location
 {
     public:
-        location(int id, int x, int y);
+        enum loc_entity{
+        nothing,
+        city
+
+        };
+        enum loc_type{
+
+        grassland,
+        forest,
+        mountain,
+        water
+
+        };
+
+        location(int id, int x, int y, int randomloc);
         void assign_x(unsigned int x);
         void assign_y(unsigned int y);
         int getX();
         int getY();
-        int getloc_type();
+        loc_type getloc_type();
         void test();
+        void alter_entity(loc_entity);
+        loc_entity get_displayed_entity();
+
+
 
     protected:
 
@@ -30,6 +42,7 @@ class location
      unsigned   int y_location = 0;
      unsigned   int LOC_ID = 100;
      loc_type location_type;
+     loc_entity displayed_entity;
 };
 
 #endif // LOCATION_H

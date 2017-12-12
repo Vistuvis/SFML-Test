@@ -6,6 +6,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
 
 
 class world
@@ -15,10 +18,13 @@ class world
         void peak();
         void build_locations();
         void LocationsToFile();
+        void alter_loc(int xcor, int ycor, location::loc_entity);
+        location::loc_entity get_entity(int i);
         int getsize();
         int get_x(int i);
         int get_y(int i);
-        int get_type(int i);
+        location::loc_type get_type(int i);
+
     protected:
 
     private:
