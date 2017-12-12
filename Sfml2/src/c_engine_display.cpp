@@ -1,5 +1,6 @@
 #include "c_engine_display.h"
 #include "world.h"
+#include "location.h"
 
 c_engine_display::c_engine_display()
 {
@@ -9,15 +10,29 @@ c_engine_display::c_engine_display()
 
 
 void c_engine_display::displayWindow(){
-    world NewWorld(5,5);
+    world NewWorld(30,30);
+
+    int specialcounter=0;
+
 
     sf::RenderWindow window(sf::VideoMode(1024, 1024), "Nope, son!");
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(30);
     char movement;
+    sf::Clock clock;
+    sf::Time t1 = sf::milliseconds(100);
 
 
     sf::Texture city_texture;
     if (!city_texture.loadFromFile("sprites/City.png"))
+    {
+        //SFML has its own generic image loading error
+    }
+     sf::Texture mountain_texture;
+    if (!mountain_texture.loadFromFile("sprites/Mountains.png"))
+    {
+        //SFML has its own generic image loading error
+    } sf::Texture forest_texture;
+    if (!forest_texture.loadFromFile("sprites/Forest.png"))
     {
         //SFML has its own generic image loading error
     }
@@ -26,13 +41,31 @@ void c_engine_display::displayWindow(){
     {
         //""
     }
+    sf::Texture water_texture;
+    if (!water_texture.loadFromFile("sprites/Water.png"))
+    {
+        //""
+    }
+    sf::Texture settler_texture;
+    if (!settler_texture.loadFromFile("sprites/Grey Cloaked Traveler.png"))
+    {
+        //""
+    }
 
     sf::Sprite city_sprite;
     city_sprite.setTexture(city_texture);
     sf::Sprite grass_sprite;
     grass_sprite.setTexture(grass_texture);
+    sf::Sprite mountain_sprite;
+    mountain_sprite.setTexture(mountain_texture);
+    sf::Sprite forest_sprite;
+    forest_sprite.setTexture(forest_texture);
+    sf::Sprite water_sprite;
+    water_sprite.setTexture(water_texture);
+    sf::Sprite settler_sprite;
+    settler_sprite.setTexture(settler_texture);
 
-    city_sprite.setPosition(10,10);
+    settler_sprite.setPosition(0,0);
 
     while (window.isOpen())
     {
@@ -64,49 +97,87 @@ void c_engine_display::displayWindow(){
             else if (event.type == sf::Event::KeyReleased){
                 movement = 'n';
             }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+                NewWorld.alter_loc((settler_sprite.getPosition().x/32), (settler_sprite.getPosition().y/32),location::city );
 
         }
+        if(clock.getElapsedTime()>t1){
 
         switch (movement){
             case 'u':
-                city_sprite.move(0,-10);
+                settler_sprite.move(0,-32);
                 std::cout<<"up";
                 break;
 
             case 'd':
 
-                city_sprite.move(0,10);
+                settler_sprite.move(0,32);
                 std::cout<<"down";
                 break;
 
             case 'r':
 
-                city_sprite.move(10,0);
+                settler_sprite.move(32,0);
                 std::cout<<"Right";
                 break;
 
             case 'l':
 
-                city_sprite.move(-10,0);
+                settler_sprite.move(-32,0);
                 std::cout<<"Left";
                 break;
             }
+            clock.restart();
+        }
 
         window.clear();
         for(int i = 0; i<=NewWorld.getsize(); i++)
         {
             switch (NewWorld.get_type(i))
             {
-                case 0:
+                case location::grassland:
                 grass_sprite.setPosition(NewWorld.get_x(i)*32, NewWorld.get_y(i)*32);
                 window.draw(grass_sprite);
+                break;
+                case location::forest:
+                    forest_sprite.setPosition(NewWorld.get_x(i)*32, NewWorld.get_y(i)*32);
+                window.draw(forest_sprite);
+                    break;
+                case location::mountain:
+                    mountain_sprite.setPosition(NewWorld.get_x(i)*32, NewWorld.get_y(i)*32);
+                    window.draw(mountain_sprite);
+                    break;
+                case location::water:
+                    water_sprite.setPosition(NewWorld.get_x(i)*32, NewWorld.get_y(i)*32);
+                    window.draw(water_sprite);
+                    break;
+                default:
+
+
+                //std::cout<<"/n X:"<<NewWorld.get_x(i)<<" Y:"<<NewWorld.get_y(i)<<"\n";
+                break;
+            }
+
+        }
+        for(int i = 0; i<=NewWorld.getsize(); i++)
+        {
+            switch (NewWorld.get_entity(i))
+            {
+                case location::nothing:
+                    break;
+                case location::city:
+                //std::cout<<"\n X:"<<NewWorld.get_x(i)<<" Y:"<<NewWorld.get_y(i)<<" "<<i;
+                city_sprite.setPosition(NewWorld.get_x(i)*32, NewWorld.get_y(i)*32);
+
+                window.draw(city_sprite);
+                break;
                 //std::cout<<"/n X:"<<NewWorld.get_x(i)<<" Y:"<<NewWorld.get_y(i)<<"\n";
             }
         }
 
         /*if(clock2.restart()>=time2){ */
 
-        window.draw(city_sprite);
+        window.draw(settler_sprite);
         /*}
         if(clock.restart()>=time1){*/window.display();//}
     }

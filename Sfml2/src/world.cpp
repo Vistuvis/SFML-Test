@@ -11,14 +11,20 @@ LocationsToFile();
 
 }
 void world::build_locations(){
+    int randomseed;
+    srand(time(NULL));
+
 
     int current_id = 0;
     for(int y=0;y<=MAPSIZE_Y;y++)
         {
         for (int x=0;x<=MAPSIZE_X;x++)
         {
-            loc_container.push_back(location(current_id, x, y));
+            randomseed = rand() % 10;
+            loc_container.push_back(location(current_id, x, y, randomseed));
             current_id++;
+
+            std::cout<<"\n X:"<<x<<" Y:"<<y<<" "<<randomseed<<" "<<current_id;
         }
     }
     /*
@@ -53,7 +59,7 @@ void world::peak(){
 
     std::cout << loc_container.size() << std::endl;
 
-for ( int x =0; x<loc_container.size(); x++)
+for ( int x =0; ((unsigned)x)<loc_container.size(); x++)
 
 
 
@@ -68,7 +74,7 @@ void world::LocationsToFile(){
 
     std::ofstream myfile;
     myfile.open("example.txt"); //adds more to file, change
-    for (int i = 0; i<loc_container.size(); i++){
+    for (int i = 0; ((unsigned)i)<loc_container.size(); i++){
         myfile << "(" << loc_container[i].getX() << "," << loc_container[i].getY() << ") ";
         if (loc_container[i].getX() == MAPSIZE_X - 1 ){myfile << "\n";}
 
@@ -94,7 +100,30 @@ int world::get_y(int i)
     return loc_container[i].getY();
 }
 
-int world::get_type(int i)
+location::loc_type world::get_type(int i)
 {
     return loc_container[i].getloc_type();
 }
+
+void world::alter_loc(int xcor, int ycor, location::loc_entity new_displayed_entity)
+{   int current_id= 0;
+    int loc_id = 0;
+    for(int y=0;y<=MAPSIZE_Y;y++){
+        for(int x=0;x<=MAPSIZE_X;x++){
+                //std::cout<<"\n "<<current_id<<" X:"<<x<<" Y:"<<y;
+            if ((y==ycor)&&(x==xcor)){
+                    loc_id=current_id;
+            }
+            current_id++;
+
+        }
+    }
+    loc_container[loc_id].alter_entity(new_displayed_entity);
+
+}
+location::loc_entity world::get_entity(int i)
+{
+    return loc_container[i].get_displayed_entity();
+}
+
+
