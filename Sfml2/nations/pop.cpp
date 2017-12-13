@@ -2,7 +2,7 @@
 
 pop::pop()
 {
-    //ctor
+    LOYALTY = 100;
 }
 
 pop::~pop()

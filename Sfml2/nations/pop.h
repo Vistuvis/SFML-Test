@@ -27,7 +27,7 @@ public:
 private:
     std::string name;
     unsigned int SIZE;
-    unsigned int LOYALTY = 100;
+    unsigned int LOYALTY;
     int coordinates;
 };
 
