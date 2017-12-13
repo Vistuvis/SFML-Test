@@ -10,16 +10,51 @@ c_engine_display::c_engine_display()
 
 
 void c_engine_display::displayWindow(){
-    world NewWorld(30,30);
 
-    int specialcounter=0;
+    int worldSize_X = 20;
+    int worldSize_Y = 20;
+
+    world NewWorld(worldSize_X,worldSize_Y);
 
 
-    sf::RenderWindow window(sf::VideoMode(1024, 1024), "Nope, son!");
+    //int specialcounter=0;
+
+
+
+
+    sf::RenderWindow window(sf::VideoMode(worldSize_X*32, worldSize_Y*32), "Nope, son!");
+      sf::RenderWindow menu_window(sf::VideoMode(worldSize_X*32, 128)," ");
+
+     sf::Texture start_menu_texture;
+    if(!start_menu_texture.loadFromFile("sprites/Start.png"))
+    {
+     //error
+    }
+    sf::Sprite start_menu_sprite;
+    start_menu_sprite.setTexture(start_menu_texture);
+
+
+        while (menu_window.isOpen())
+        {
+            sf::Event menu_window_event;
+
+
+            while(menu_window.pollEvent(menu_window_event))
+            {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                menu_window.close();
+            }
+
+            menu_window.clear();
+            menu_window.draw(start_menu_sprite);
+            menu_window.display();
+        }
+
+
     window.setFramerateLimit(30);
     char movement;
     sf::Clock clock;
-    sf::Time t1 = sf::milliseconds(100);
+    sf::Time t1 = sf::milliseconds(50);
 
 
     sf::Texture city_texture;
@@ -98,7 +133,7 @@ void c_engine_display::displayWindow(){
                 movement = 'n';
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-                NewWorld.alter_loc((settler_sprite.getPosition().x/32), (settler_sprite.getPosition().y/32),location::city );
+                NewWorld.alter_loc((settler_sprite.getPosition().x), (settler_sprite.getPosition().y),location::city );
 
         }
         if(clock.getElapsedTime()>t1){
