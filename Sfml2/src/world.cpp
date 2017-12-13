@@ -106,7 +106,11 @@ location::loc_type world::get_type(int i)
 }
 
 void world::alter_loc(int xcor, int ycor, location::loc_entity new_displayed_entity)
-{   int current_id= 0;
+{
+    xcor = xcor/32;
+    ycor = ycor/32;
+
+    int current_id= 0;
     int loc_id = 0;
     for(int y=0;y<=MAPSIZE_Y;y++){
         for(int x=0;x<=MAPSIZE_X;x++){
